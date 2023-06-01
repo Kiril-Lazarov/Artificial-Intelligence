@@ -4,7 +4,7 @@ class Body:
     # `Gravitational` constant.Can be the real value or free choice
     G = 0.004
 
-    signal_speed = 80
+    signal_speed = 5
 
     def __init__(self, x, y, mass, radius=0.2, color=(250, 250, 250)):
         self.x = x
