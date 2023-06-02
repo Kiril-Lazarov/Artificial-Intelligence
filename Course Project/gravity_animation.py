@@ -2,6 +2,7 @@ import numpy as np
 import pygame 
 from body import Body
 import time
+import math
 
 def animation(interacting_bodies_number, *bodies, simultaneous_interaction=False, trace_trajectories=False,
               screen_width=1500, screen_height=800):
@@ -74,17 +75,22 @@ def animation(interacting_bodies_number, *bodies, simultaneous_interaction=False
     # Exit
     pygame.quit()
     
-def explanation_ani(screen_width=1500, screen_height=800):
+def explanation_ani(screen_width=1500, screen_height=800, moving_bodies=False):
     center = (screen_width/2, screen_height/2)
     pygame.init()
     win = pygame.display.set_mode((screen_width, screen_height)) 
     bg_color = (255, 255, 255)
     
     # Orange body initial position
-    moving_body_pos = np.array([900,200])
+    orange_body_pos = np.array([900,200])
     
-    # The slope of the line connects orange body and blue body
-    slope =(200/150)
+    # blue_body_velocity_vec = np.array([0, 0.3])
+    
+    # The slope of the line connecting the orange and blue bodies.
+    slope = ((center[1]-orange_body_pos[1])/(orange_body_pos[0] - center[0]))
+   
+    # slope =(200/150)
+ 
     angle_rad = math.atan(slope)
     
     # The velocity vector with which the orange body will start moving 
@@ -99,8 +105,7 @@ def explanation_ani(screen_width=1500, screen_height=800):
  
     running = True
     frame = 0
-    # height = screen_height / 2
-    # width = screen_width / 2
+
     while running:
         frame += 1
         
@@ -108,16 +113,19 @@ def explanation_ani(screen_width=1500, screen_height=800):
         for event in pygame.event.get():
             if event.type == pygame.QUIT:
                 running = False
+                
         win.fill(bg_color)
        
         pygame.draw.circle(win, (0,0,250), center, frame)
         pygame.draw.circle(win, (250,250,250), center, frame-2)
         pygame.draw.circle(win, (0,0,250), center, radius = 10)
+        
         if frame < 250:
             pygame.draw.circle(win, (255, 165, 0), (900,200), radius = 7)
         else:
-            moving_body_pos = moving_body_pos + velocity_vec
-            pygame.draw.circle(win, (255, 165, 0), moving_body_pos, radius = 7)
+            orange_body_pos = orange_body_pos + velocity_vec
+            pygame.draw.circle(win, (255, 165, 0), orange_body_pos, radius = 7)
+            
         text = font.render(f'Frame number {frame}', True, (0,0,0))
         
         # Refreshing the screen
@@ -127,7 +135,7 @@ def explanation_ani(screen_width=1500, screen_height=800):
         pygame.display.flip()
         
         # End of test animation
-        if  frame == 700:
+        if  frame == 780:
             running = False
     # Exit
     pygame.quit()
