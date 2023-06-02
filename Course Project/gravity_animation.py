@@ -87,7 +87,7 @@ def explanation_ani(screen_width=1500, screen_height=800, moving_bodies=False):
     # blue_body_velocity_vec = np.array([0, 0.3])
     
     # The slope of the line connecting the orange and blue bodies.
-    slope = ((center[1]-orange_body_pos[1])/(orange_body_pos[0] - center[0]))
+    slope = (center[1]-orange_body_pos[1])/(orange_body_pos[0] - center[0])
    
     # slope =(200/150)
  
