@@ -23,10 +23,6 @@ class Body:
 
 
     @staticmethod
-    def calc_acceleration(M, r):
-        return Body.G * M / r ** 2
-
-    @staticmethod
     def distance(point1, point2):
         return math.sqrt((point1[0] - point2[0]) ** 2 + (point1[1] - point2[1]) ** 2)
 
@@ -52,9 +48,9 @@ class Body:
                                  [other_object_x, other_object_y])
             # dist = body.distance([body.x, body.y],
             #                      [other_object_x, other_object_y])
-        dist_vector = [other_object_x - body.fictional_position[0], other_object_y - body.fictional_position[1]]
+        dist_vector = np.array([other_object_x - body.fictional_position[0], other_object_y - body.fictional_position[1]])
         first_deriv = body.first_derivative(other_object_mass, dist)
-        velocity_vector = np.array([dist_vector[0] * first_deriv, dist_vector[1] * first_deriv])
+        velocity_vector = np.array([dist_vector * first_deriv])
 
         body.velocity = body.velocity + velocity_vector
 
