@@ -1,7 +1,7 @@
 import numpy as np 
 import pygame 
 from body import Body
-
+import time
 
 def animation(interacting_bodies_number, *bodies, simultaneous_interaction=False, trace_trajectories=False,
               screen_width=1500, screen_height=800):
@@ -71,5 +71,63 @@ def animation(interacting_bodies_number, *bodies, simultaneous_interaction=False
         clock.tick(FPS)
         pygame.display.update()
         pygame.display.flip()
+    # Exit
+    pygame.quit()
+    
+def explanation_ani(screen_width=1500, screen_height=800):
+    center = (screen_width/2, screen_height/2)
+    pygame.init()
+    win = pygame.display.set_mode((screen_width, screen_height)) 
+    bg_color = (255, 255, 255)
+    
+    # Orange body initial position
+    moving_body_pos = np.array([900,200])
+    
+    # The slope of the line connects orange body and blue body
+    slope =(200/150)
+    angle_rad = math.atan(slope)
+    
+    # The velocity vector with which the orange body will start moving 
+    # towards the blue body when the gravitational signal from the blue body reaches it.
+    velocity_vec = np.array([-math.cos(angle_rad),math.sin(angle_rad)]) * 0.5
+ 
+    font = pygame.font.Font(None, 36)
+    
+    clock = pygame.time.Clock()
+    FPS = 100 # frames per second
+    clock.tick(FPS)
+ 
+    running = True
+    frame = 0
+    # height = screen_height / 2
+    # width = screen_width / 2
+    while running:
+        frame += 1
+        
+        # Check for event
+        for event in pygame.event.get():
+            if event.type == pygame.QUIT:
+                running = False
+        win.fill(bg_color)
+       
+        pygame.draw.circle(win, (0,0,250), center, frame)
+        pygame.draw.circle(win, (250,250,250), center, frame-2)
+        pygame.draw.circle(win, (0,0,250), center, radius = 10)
+        if frame < 250:
+            pygame.draw.circle(win, (255, 165, 0), (900,200), radius = 7)
+        else:
+            moving_body_pos = moving_body_pos + velocity_vec
+            pygame.draw.circle(win, (255, 165, 0), moving_body_pos, radius = 7)
+        text = font.render(f'Frame number {frame}', True, (0,0,0))
+        
+        # Refreshing the screen
+        win.blit(text, (10, 10))
+        clock.tick(FPS)
+        pygame.display.update()
+        pygame.display.flip()
+        
+        # End of test animation
+        if  frame == 700:
+            running = False
     # Exit
     pygame.quit()
