@@ -50,7 +50,7 @@ class Body:
             #                      [other_object_x, other_object_y])
         dist_vector = np.array([other_object_x - body.fictional_position[0], other_object_y - body.fictional_position[1]])
         first_deriv = body.first_derivative(other_object_mass, dist)
-        velocity_vector = np.array([dist_vector * first_deriv])
+        velocity_vector = np.array(dist_vector * first_deriv)
 
         body.velocity = body.velocity + velocity_vector
 
