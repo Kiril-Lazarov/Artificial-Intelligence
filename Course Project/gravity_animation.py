@@ -52,9 +52,9 @@ def animation(interacting_bodies_number, *bodies, simultaneous_interaction=False
             else:
                 body.x += body.velocity[0]
                 body.y += body.velocity[1]
-            # Drawing the bodies at their new positions
+                
+            # Transforming the Cartesian coordinates of positions into the Pygame coordinate system.
             x_position = body.x + width
-
             y_position = height - body.y
             pygame.draw.circle(win, body.color, (x_position, y_position), body.radius)
    
@@ -214,7 +214,7 @@ def еxplanatory_animation2(screen_width=1500, screen_height=800):
         # Change in the velocity vector of the blue body after it is influenced
         # by the gravitational signal from the orange body.
         if frame == 888:
-            blue_body_velocity_vec[1] = -0.01 
+            blue_body_velocity_vec[1] = -0.5 
         
         # Update blue body position
         blue_body_pos = blue_body_pos + blue_body_velocity_vec   
@@ -230,6 +230,99 @@ def еxplanatory_animation2(screen_width=1500, screen_height=800):
         
         # End of test animation
         if  frame == 1700:
+            running = False
+    # Exit
+    pygame.quit()
+
+    
+def signal_trajectory_animation():
+    screen_width = 1500
+    screen_height = 800
+
+    signal_positions_history = []
+
+    center = (screen_width / 2, screen_height / 2)
+    
+    pygame.init()
+    win = pygame.display.set_mode((screen_width, screen_height))
+    bg_color = (255, 255, 255)
+
+    # Blue body initial position
+    blue_body_pos = np.array([center[0] - 200, center[1] + 100])
+
+    # Orange body initial position
+    orange_body_pos = np.array([950, center[1] + 100])
+
+    orange_body_velocity_vec = np.array([0, -0.5])
+
+    font = pygame.font.Font(None, 36)
+
+    clock = pygame.time.Clock()
+    FPS = 100  # frames per second
+    clock.tick(FPS)
+
+    running = True
+    frame = 0
+
+    while running:
+        frame += 1
+
+        # Check for event
+        for event in pygame.event.get():
+            if event.type == pygame.QUIT:
+                running = False
+
+        win.fill(bg_color)
+
+        # Update the spreading gravitational signal circle
+        pygame.draw.circle(win, (0, 0, 250), (blue_body_pos[0], blue_body_pos[1]), frame)
+        pygame.draw.circle(win, (250, 250, 250), (blue_body_pos[0], blue_body_pos[1]), frame - 2)
+
+        # Update orange body position
+        orange_body_pos = orange_body_pos + orange_body_velocity_vec
+
+        # The slope of the line between blue and orange bodies
+        slope = (blue_body_pos[1] - orange_body_pos[1]) / (blue_body_pos[0] - orange_body_pos[0])
+
+        angle_rad = math.atan(slope)
+
+        signal_x = blue_body_pos[0] + frame * math.cos(angle_rad)
+        signal_y = blue_body_pos[1] + frame * math.sin(angle_rad)
+
+        signal_position = np.array([signal_x, signal_y])
+
+        signal_positions_history.append(signal_position)
+
+        for position in signal_positions_history:
+            pygame.draw.circle(win, (125, 125, 125), (position[0], position[1]), 1)
+
+        # Draw signal point 
+        pygame.draw.circle(win, (125, 125, 125), signal_position, 5)
+
+        if frame < 462:
+            # Draw connecting line between blue and orange bodies
+            pygame.draw.line(win, (0, 0, 250), blue_body_pos, orange_body_pos, 1)
+        else:
+            # Draw connecting line between blue body and gravitational signal
+            pygame.draw.line(win, (0, 0, 250), blue_body_pos, signal_position, 1)
+
+        pygame.draw.circle(win, (255, 165, 0), orange_body_pos, 7)
+
+        # Draw blue body
+        pygame.draw.circle(win, (0, 0, 250), blue_body_pos, 10)
+
+        text = font.render(f'Frame number {frame}', True, (0, 0, 0))
+
+        # Refreshing the screen
+        win.blit(text, (10, 10))
+        clock.tick(FPS)
+        pygame.display.update()
+        pygame.display.flip()
+        if frame == 461:
+            time.sleep(5)
+
+        # End of test animation
+        if frame == 1700:
             running = False
     # Exit
     pygame.quit()
