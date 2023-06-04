@@ -247,7 +247,7 @@ def signal_trajectory_animation():
     win = pygame.display.set_mode((screen_width, screen_height))
     bg_color = (255, 255, 255)
 
-    # Blue body initial position
+    # Blue body position
     blue_body_pos = np.array([center[0] - 200, center[1] + 100])
 
     # Orange body initial position
@@ -318,11 +318,135 @@ def signal_trajectory_animation():
         clock.tick(FPS)
         pygame.display.update()
         pygame.display.flip()
-        if frame == 461:
-            time.sleep(5)
 
         # End of test animation
-        if frame == 1700:
+        if frame == 1000:
             running = False
+    # Exit
+    pygame.quit()
+    
+    
+def expanding_spiral_animation():
+    screen_width = 1500
+    screen_height = 800
+    
+    # Signal speed in pixels by frame
+    signal_speed = 80   
+  
+
+    center = (screen_width / 2, screen_height / 2)
+    
+    pygame.init()
+    win = pygame.display.set_mode((screen_width, screen_height))
+    bg_color = (255, 255, 255)
+
+    # Blue body position
+    blue_body_pos = np.array([center[0] - 200, center[1] + 100])
+
+    # Orange body position 0
+    orange_body_pos_0 = np.array([950, center[1] + 100])
+    
+    # Orange body position 1
+    orange_body_pos_1 = np.array([950, center[1]])
+    
+    # Orange body position 2
+    orange_body_pos_2 = np.array([950, center[1] - 100])
+    
+    # Orange body position 3
+    orange_body_pos_3 = np.array([950, center[1] - 200])
+
+    orange_body_position_list = [orange_body_pos_0, orange_body_pos_1, orange_body_pos_2, orange_body_pos_3]
+    
+    orange_body_velocity_vec = np.array([0, -0.5])
+
+    font = pygame.font.Font(None, 36)
+
+    clock = pygame.time.Clock()
+    FPS = 100  # frames per second
+    clock.tick(FPS)
+
+    running = True
+    frame = 0
+
+    while running:
+        frame += 1
+   
+        # Check for event
+        for event in pygame.event.get():
+            if event.type == pygame.QUIT:
+                running = False
+
+        win.fill(bg_color)
+        
+        moment_position = 0
+        signal_x = 0
+        signal_y = 0
+        signal_speed += frame * 0.001        
+        
+        # Draw descreet postions of signal and orange body
+        for position in orange_body_position_list:
+            moment_position += 1
+           
+            # Draw orange body frames positions
+            pygame.draw.circle(win, (255, 165, 0), position, 7)
+            
+            # The slope of the line between blue and orange body
+            slope = (blue_body_pos[1] - position[1]) / (blue_body_pos[0] - position[0])
+
+            angle_rad = math.atan(slope)
+            if moment_position > 1:
+                coefficient = (moment_position -1)*signal_speed
+                signal_x = blue_body_pos[0] + coefficient * math.cos(angle_rad)
+                signal_y = blue_body_pos[1] + coefficient * math.sin(angle_rad)
+            
+            pygame.draw.circle(win, (125, 125, 125), (signal_x, signal_y), 5)           
+   
+    
+        # Settings for signal and body to track the signal trajectory.
+        orange_fictional_init_position = orange_body_pos_0
+        curr_orange_body_velocity_vec = orange_body_velocity_vec
+        curr_signal_speed = signal_speed * 0.005     
+        
+        
+        # Tracing the signal`s trajectory for this value of the signal speed
+        for fict_frame in range(700):            
+           
+            # Update orange body position
+            orange_fictional_init_position = orange_fictional_init_position + curr_orange_body_velocity_vec
+            
+            slope = (blue_body_pos[1] - orange_fictional_init_position[1]) / (blue_body_pos[0] - orange_fictional_init_position[0])
+            
+            angle_rad = math.atan(slope)
+            
+            coefficient = fict_frame * curr_signal_speed
+            
+            x = blue_body_pos[0] + coefficient * math.cos(angle_rad)
+            y = blue_body_pos[1] + coefficient *  math.sin(angle_rad) 
+            
+            pygame.draw.circle(win, (125, 125, 125), (x,y), 1)
+        
+        # Draw blue body
+        pygame.draw.circle(win, (0, 0, 250), blue_body_pos, 10)
+
+        pygame.draw.line(win, (255, 165, 0), orange_body_pos_0, orange_body_pos_3, 1)
+        
+        text = font.render(f'Frame number {frame}', True, (0, 0, 0))
+
+        # Show frame number for position of the orange body
+        for index in range(4):
+            info = font.render(f'Frame {index}', True, (0, 0, 0))
+            x, y = orange_body_position_list[index]
+            
+            win.blit(info, (x + 20, y))
+            
+        # Refreshing the screen
+        win.blit(text, (10, 10))
+        clock.tick(FPS)
+        pygame.display.update()
+        pygame.display.flip()
+        
+        if frame == 1500:
+            running = False
+       
     # Exit
     pygame.quit()
