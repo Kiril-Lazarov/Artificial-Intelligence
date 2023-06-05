@@ -16,7 +16,9 @@ def animation(interacting_bodies_number, *bodies, simultaneous_interaction=False
     win.blit(background_image, (0, 0))
 
     clock = pygame.time.Clock()
-    FPS = 100  # желаните кадри в секунда
+    
+    # желаните кадри в секунда
+    FPS = 100  
     clock.tick(FPS)
     win.blit(background_image, (0, 0))
     running = True
@@ -35,9 +37,8 @@ def animation(interacting_bodies_number, *bodies, simultaneous_interaction=False
         # win.fill((0,0,0))
 
         win.blit(background_image, (0, 0))
-        # Изчисляване на новите положения на всички участващи тела
-        # [b.signal_start_moments.append(frame) for b in bodies]
-
+        
+        
         body_access.calc_new_positions(frame, simultaneous_interaction, *bodies)
         # [b.position_history.append([b.x, b.y,len(bodies)-1]) for b in bodies]
 
