@@ -235,13 +235,11 @@ def еxplanatory_animation2(screen_width=1500, screen_height=800):
     pygame.quit()
 
     
-def signal_trajectory_animation():
-    screen_width = 1500
-    screen_height = 800
-
-    signal_positions_history = []
-
+def signal_trajectory_animation(screen_width = 1500,screen_height = 800):  
+    
     center = (screen_width / 2, screen_height / 2)
+    
+    signal_positions_history = []
     
     pygame.init()
     win = pygame.display.set_mode((screen_width, screen_height))
@@ -258,7 +256,9 @@ def signal_trajectory_animation():
     font = pygame.font.Font(None, 36)
 
     clock = pygame.time.Clock()
-    FPS = 100  # frames per second
+    
+    # frames per second
+    FPS = 100  
     clock.tick(FPS)
 
     running = True
@@ -326,9 +326,8 @@ def signal_trajectory_animation():
     pygame.quit()
     
     
-def expanding_spiral_animation():
-    screen_width = 1500
-    screen_height = 800
+def expanding_spiral_animation(screen_width = 1500,screen_height = 800):   
+    
     
     # Signal speed in pixels by frame
     signal_speed = 80   
@@ -400,7 +399,7 @@ def expanding_spiral_animation():
                 signal_y = blue_body_pos[1] + coefficient * math.sin(angle_rad)
             
             pygame.draw.circle(win, (125, 125, 125), (signal_x, signal_y), 5)           
-   
+            pygame.draw.line(win, (125, 125, 125), blue_body_pos, position, 1)
     
         # Settings for signal and body to track the signal trajectory.
         orange_fictional_init_position = orange_body_pos_0
