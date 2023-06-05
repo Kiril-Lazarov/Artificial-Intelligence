@@ -1,7 +1,7 @@
 import numpy as np
 import matplotlib.pyplot as plt
 
-def intersection_problem_plot(question_mark = False):
+def intersection_problem_plot(question_mark = True):
     bodyA_pos = np.array([-4, -4])
     bodyB_pos_0 = np.array([3, -2])
     bodyB_pos_1 = np.array([2, 2])
@@ -34,7 +34,7 @@ def intersection_problem_plot(question_mark = False):
     plt.xlabel('X')
     plt.ylabel('Y')
     
-    if not question_mark:
+    if question_mark:
         plt.text(2.4, 0, '?', fontsize=20)
         plt.text(1.5, -0.5, 'Point of intersection', fontsize=8) 
         
@@ -60,7 +60,28 @@ def intersection_problem_plot(question_mark = False):
     
     plt.show()
     
+def plot_simultaneous_vector_of_acceleration():
+    bodyA = np.array([0,0])
+    bodyB = np.array([3,2])
 
+    plt.quiver(bodyB[0], bodyB[1], -2.4, -1.9, angles = "xy", scale_units = "xy", scale = 1.5, color = 'green')
+
+    plt.scatter(bodyA[0],bodyA[1],s=200)
+    plt.scatter(bodyB[0],bodyB[1])
+
+    plt.text(bodyA[0]-0.1, bodyA[1]-1, 'A', fontsize=12, fontweight='bold')
+    plt.text(bodyB[0]-0.1, bodyA[1] +1, 'B', fontsize=12, fontweight='bold')
+    plt.text(bodyB[0] - 1, bodyA[1] + 2.2, '$g$', fontsize=12, fontweight='bold')
+
+    plt.title('The gravitational acceleration vector in the case of simultaneous interaction.')
+
+    plt.xlim(-5,5)
+    plt.ylim(-5,5)
+
+    plt.xlabel('X')
+    plt.ylabel('Y')
+
+    plt.show()
    
     
     
