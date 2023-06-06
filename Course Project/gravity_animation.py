@@ -4,78 +4,71 @@ from body import Body
 import time
 import math
 
-# def animation(interacting_bodies_number, *bodies, simultaneous_interaction=False, trace_trajectories=False,
-#               screen_width=1500, screen_height=800):
+def animation(interacting_bodies_number, *bodies, simultaneous_interaction=False, trace_trajectories=False,
+              screen_width=1500, screen_height=800):
     
-#     # Variable for accessing the Body class.
-#     body_access = bodies[0]
-#     pygame.init()
-#     win = pygame.display.set_mode((screen_width, screen_height))
+    # Variable for accessing the Body class.
+    body_access = bodies[0]
+    pygame.init()
+    win = pygame.display.set_mode((screen_width, screen_height))
 
-#     background_image = pygame.image.load(r'C:\Users\lenovo\PycharmProjects\MyProjects\gravitation\Star-Field.jpg')
-
-#     win.blit(background_image, (0, 0))
-
-#     clock = pygame.time.Clock()
+    prefix = 'Non-simultaneous' if not simultaneous_interaction else 'Simultaneous'
     
-#     # Frames per second
-#     FPS = 100  
-#     clock.tick(FPS)
-#     win.blit(background_image, (0, 0))
-#     running = True
+    pygame.display.set_caption(f'{prefix} gravitational interaction')
     
-#     frame = 0
-#     height = screen_height / 2
-#     width = screen_width / 2
+    background_image = pygame.image.load(r'C:\Users\lenovo\PycharmProjects\MyProjects\gravitation\Star-Field.jpg')
+
+    win.blit(background_image, (0, 0))
+
+    clock = pygame.time.Clock()
     
-#     while running:
-#         frame += 1
+    # Frames per second
+    FPS = 100  
+    clock.tick(FPS)
+    win.blit(background_image, (0, 0))
+    running = True
+    
+    frame = 0
+    height = screen_height / 2
+    width = screen_width / 2
+    
+    while running:
+        frame += 1
 
-#         # Check for events
-#         for event in pygame.event.get():
-#             if event.type == pygame.QUIT:
-#                 running = False
-
-#         win.blit(background_image, (0, 0))
+        # Check for events
+        for event in pygame.event.get():
+            if event.type == pygame.QUIT:
+                running = False
+        if not trace_trajectories:
+            win.blit(background_image, (0, 0))
         
-#         # Calculate the new postions of all bodies
-#         body_access.calc_new_positions(frame, simultaneous_interaction, *bodies)
+        # Calculate the new postions of all bodies
+        body_access.calc_new_positions(frame, simultaneous_interaction, *bodies)
 
-#         for body in bodies:
-#             if not simultaneous_interaction:
+        for body in bodies:
+            if not simultaneous_interaction:
                 
-#                 body.x, body.y = body.fictional_position
-#                 body.position_history.append([body.x, body.y, [], frame])
+                body.x, body.y = body.fictional_position
+                body.position_history.append([body.x, body.y, [], frame])
                 
-#                 if len(body.position_history[0][2]) == interacting_bodies_number:
-#                     del body.position_history[0]
-#             else:
-#                 body.x += body.velocity[0]
-#                 body.y += body.velocity[1]
+                if len(body.position_history[0][2]) == interacting_bodies_number:
+                    del body.position_history[0]
+            else:
+                body.x += body.velocity[0]
+                body.y += body.velocity[1]
                 
-#             # Transforming the Cartesian coordinates of positions into the Pygame coordinate system.
-#             x_position = body.x + width
-#             y_position = height - body.y
-#             pygame.draw.circle(win, body.color, (x_position, y_position), body.radius)
-   
+            # Transforming the Cartesian coordinates of positions into the Pygame coordinate system.
+            x_position = body.x + width
+            y_position = height - body.y
+            pygame.draw.circle(win, body.color, (x_position, y_position), body.radius)
+            
+        # Refreshing the screen
+        clock.tick(FPS)
+        pygame.display.update()
+        pygame.display.flip()
 
-#             # # Drawing points to trace body traejectories
-#             # if trace_trajectories:
-#             #     length = len(body.position_history)
-#             #     trace_array = []
-#             #     if length > 200:
-#             #         trace_array = body.position_history[length - 200:]
-#             #     for x, y, _, _ in trace_array:
-#             #         pygame.draw.circle(win, body.color, (x, y), 1)
-
-#         # Refreshing the screen
-#         clock.tick(FPS)
-        
-#         if not trace_trajectories:
-#             pygame.display.update()
-#         pygame.display.flip()
-#     # Exit
-#     pygame.quit()
+    # Exit
+    pygame.quit()
     
 def еxplanatory_animation1(screen_width=1500, screen_height=800, moving_bodies=False):
     center = (screen_width/2, screen_height/2)
@@ -83,10 +76,10 @@ def еxplanatory_animation1(screen_width=1500, screen_height=800, moving_bodies=
     win = pygame.display.set_mode((screen_width, screen_height)) 
     bg_color = (255, 255, 255)
     
+    pygame.display.set_caption('Expanding gravitational signal')
+    
     # Orange body initial position
     orange_body_pos = np.array([900,200])
-    
-    # blue_body_velocity_vec = np.array([0, 0.3])
     
     # The slope of the line connecting the orange and blue bodies.
     slope = (center[1]-orange_body_pos[1])/(orange_body_pos[0] - center[0])
@@ -149,6 +142,7 @@ def еxplanatory_animation2(screen_width=1500, screen_height=800):
     win = pygame.display.set_mode((screen_width, screen_height)) 
     bg_color = (255, 255, 255)    
     
+    pygame.display.set_caption('Dinamicaly interacting bodies')
     
     # Blue body initial position
     blue_body_pos = np.array([700,350])
@@ -160,9 +154,7 @@ def еxplanatory_animation2(screen_width=1500, screen_height=800):
     
     # The slope of the line connecting the orange body to the point from which 
     # the blue body emits a gravitational signal.
-    slope = (center[1]-orange_body_pos[1])/(orange_body_pos[0] - center[0])
-   
- 
+    slope = (center[1]-orange_body_pos[1])/(orange_body_pos[0] - center[0])   
      
     angle_rad = math.atan(slope)
     
@@ -247,6 +239,8 @@ def signal_trajectory_animation(screen_width = 1500,screen_height = 800):
     win = pygame.display.set_mode((screen_width, screen_height))
     bg_color = (255, 255, 255)
 
+    pygame.display.set_caption('Signal trajectory')
+    
     # Blue body position
     blue_body_pos = np.array([center[0] - 200, center[1] + 100])
 
@@ -341,6 +335,8 @@ def expanding_spiral_animation(screen_width = 1500,screen_height = 800):
     win = pygame.display.set_mode((screen_width, screen_height))
     bg_color = (255, 255, 255)
 
+    pygame.display.set_caption('Expanding spiral')
+    
     # Blue body position
     blue_body_pos = np.array([center[0] - 200, center[1] + 100])
 
